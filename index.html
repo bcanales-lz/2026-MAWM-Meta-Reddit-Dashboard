@@ -65,13 +65,14 @@ tr:last-child td{border-bottom:none;}
 <div class="hdr">
   <div class="hdr-row">
     <div>
-      <p class="hdr-sub">Reddit Ads + Meta Ads &middot; Estate Planning &middot; <span id="mtaNote" style="color:var(--tx3);">Live data &mdash; Snowflake WEB_METRICS &middot; Updated Aug 11, 2026</span></p>
+      <p class="hdr-sub">Reddit Ads + Meta Ads &middot; Estate Planning &middot; <span id="mtaNote" style="color:var(--tx3);">Live data &mdash; Snowflake WEB_METRICS &middot; Updated Aug 16, 2026</span></p>
       <p class="hdr-title">Reddit &amp; Meta &ndash; Make a Will Month 2026</p>
     </div>
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
       <div class="ctrl">
         <button class="btn-p on" id="bp-sl"  onclick="setPeriod('sl')">Since Launch</button>
-        <button class="btn-p" id="bp-l7d" onclick="setPeriod('l7d')">L7D</button>
+        <button class="btn-p" id="bp-l7d" onclick="setPeriod('l7d')">Aug 10–16</button>
+        <button class="btn-p" id="bp-l14d" onclick="setPeriod('l14d')">Aug 3–9</button>
       </div>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
         <span id="rangeLabel" style="font-size:11px;color:var(--tx3);">— data pending —</span>
@@ -217,122 +218,98 @@ tr:last-child td{border-bottom:none;}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
 <script>
 // ── REAL DATA — sourced from Snowflake (CAM_SPEND_DAILY + WEB_METRICS MTA) ──
-// Campaign launch: Aug 3, 2026. Data through Aug 10, 2026.
-// Reddit reach/freq: NOT available via Snowflake FiveTran connector (pending CSV).
+// Campaign launch: Aug 3, 2026. Data through Aug 16, 2026.
+// Reddit reach/freq: NOT available via Snowflake FiveTran connector.
 // Reddit ad-level ROAS: RAW.REDDIT_ADS.AD_REPORT.CONVERSION_ROAS (spend-weighted avg). Platform only, not MTA.
 // Meta creative ROAS: Meta Ads API website_purchase_roas. Platform only, not MTA.
-// Meta L30D/L60D MTA includes pre-MAWM campaign history (base EP RET running before 8/3).
 // ─────────────────────────────────────────────────────────────────────────────
 
-// Reddit Prospecting creatives — RAW.REDDIT_ADS.AD_REPORT, Aug 3–10
+// Reddit Prospecting creatives — RAW.REDDIT_ADS.AD_REPORT, Aug 3–16
 const _REDDIT_ADS_PRS = [
   // Ad group: EP-OlderParents
-  {name:"Grandparents & Grandkid · Older Parents",      channel:"reddit", adset:"prs", spend:3173.60, imp:127203, freq:0, cpm:24.95, ctr:0.9143, platformRoas:0.19},
-  {name:"Grandbaby · Older Parents (Text Msg)",          channel:"reddit", adset:"prs", spend:1974.98, imp:77318,  freq:0, cpm:25.54, ctr:0.8290, platformRoas:0.07},
-  {name:"Wrong Hands 6s · Older Parents",               channel:"reddit", adset:"prs", spend:1698.88, imp:61217,  freq:0, cpm:27.75, ctr:0.9605, platformRoas:0.36},
-  {name:"Wrong Hands 30s · Older Parents",              channel:"reddit", adset:"prs", spend:1631.50, imp:62717,  freq:0, cpm:26.01, ctr:0.9391, platformRoas:1.69},
-  {name:"Wrong Hands 15s · Older Parents",              channel:"reddit", adset:"prs", spend:1322.61, imp:51672,  freq:0, cpm:25.60, ctr:0.9193, platformRoas:0.46},
+  {name:"Grandparents & Grandkid · Older Parents",      channel:"reddit", adset:"prs", spend:4819.07, imp:185676, freq:0, cpm:25.95, ctr:0.9339, platformRoas:0.27},
+  {name:"Wrong Hands 6s · Older Parents",               channel:"reddit", adset:"prs", spend:2955.12, imp:103506, freq:0, cpm:28.55, ctr:1.0077, platformRoas:0.41},
+  {name:"Grandbaby · Older Parents (Text Msg)",          channel:"reddit", adset:"prs", spend:2442.22, imp:92333,  freq:0, cpm:26.45, ctr:0.8881, platformRoas:0.06},
+  {name:"Wrong Hands 30s · Older Parents",              channel:"reddit", adset:"prs", spend:2039.75, imp:75095,  freq:0, cpm:27.16, ctr:0.9761, platformRoas:1.35},
+  {name:"Wrong Hands 15s · Older Parents",              channel:"reddit", adset:"prs", spend:1763.36, imp:65385,  freq:0, cpm:26.97, ctr:0.9712, platformRoas:1.22},
   // Ad group: EP-FamilyBuilders/SandwichGeneration
-  {name:"Dad/Teen/Grandpa · Sandwich Gen",              channel:"reddit", adset:"prs", spend:2646.47, imp:77210,  freq:0, cpm:34.28, ctr:1.4894, platformRoas:0.10},
-  {name:"Dishes · Sandwich Gen (Text Msg)",             channel:"reddit", adset:"prs", spend:1923.53, imp:54531,  freq:0, cpm:35.27, ctr:1.4359, platformRoas:0.39},
-  {name:"Wrong Hands 6s · Family/Sandwich Gen",         channel:"reddit", adset:"prs", spend:1261.17, imp:30015,  freq:0, cpm:42.02, ctr:1.4959, platformRoas:0.12},
-  {name:"Mom & Daughter · Family Builders",             channel:"reddit", adset:"prs", spend:1182.25, imp:34806,  freq:0, cpm:33.97, ctr:1.2440, platformRoas:0.09},
-  {name:"Newborn · Family Builders (Text Msg)",         channel:"reddit", adset:"prs", spend:1146.59, imp:33655,  freq:0, cpm:34.07, ctr:1.4262, platformRoas:0.26},
-  {name:"Wrong Hands 15s · Family/Sandwich Gen",        channel:"reddit", adset:"prs", spend:888.05,  imp:19263,  freq:0, cpm:46.10, ctr:1.5885, platformRoas:null},
-  {name:"Wrong Hands 30s · Family/Sandwich Gen",        channel:"reddit", adset:"prs", spend:739.52,  imp:18030,  freq:0, cpm:41.02, ctr:1.4032, platformRoas:null}
+  {name:"Dad/Teen/Grandpa · Sandwich Gen",              channel:"reddit", adset:"prs", spend:3720.79, imp:111857, freq:0, cpm:33.26, ctr:1.4286, platformRoas:0.10},
+  {name:"Dishes · Sandwich Gen (Text Msg)",             channel:"reddit", adset:"prs", spend:2488.03, imp:72085,  freq:0, cpm:34.52, ctr:1.4219, platformRoas:0.30},
+  {name:"Wrong Hands 6s · Family/Sandwich Gen",         channel:"reddit", adset:"prs", spend:2030.87, imp:44047,  freq:0, cpm:46.11, ctr:1.6528, platformRoas:0.12},
+  {name:"Newborn · Family Builders (Text Msg)",         channel:"reddit", adset:"prs", spend:1721.36, imp:51579,  freq:0, cpm:33.37, ctr:1.3494, platformRoas:0.17},
+  {name:"Mom & Daughter · Family Builders",             channel:"reddit", adset:"prs", spend:1720.58, imp:51599,  freq:0, cpm:33.35, ctr:1.3004, platformRoas:0.10},
+  {name:"Wrong Hands 15s · Family/Sandwich Gen",        channel:"reddit", adset:"prs", spend:1284.32, imp:25978,  freq:0, cpm:49.44, ctr:1.6976, platformRoas:null},
+  {name:"Wrong Hands 30s · Family/Sandwich Gen",        channel:"reddit", adset:"prs", spend:1043.37, imp:23253,  freq:0, cpm:44.87, ctr:1.5181, platformRoas:0.61}
 ];
 
-// Reddit Retargeting creatives — RAW.REDDIT_ADS.AD_REPORT, Aug 3–10
+// Reddit Retargeting creatives — RAW.REDDIT_ADS.AD_REPORT, Aug 3–16
 const _REDDIT_ADS_RET = [
-  // Ad group: CartAbandoners
-  {name:"Up to 20% Off · Family Builders (Text)",       channel:"reddit", adset:"ret", spend:382.82, imp:11179, freq:0, cpm:34.24, ctr:0.4741, platformRoas:null},
-  {name:"Grandparents & Grandkid · Older Parents",      channel:"reddit", adset:"ret", spend:346.61, imp:10229, freq:0, cpm:33.88, ctr:0.4693, platformRoas:0.12},
-  {name:"Young Mom · Family Builders (Push Notif)",     channel:"reddit", adset:"ret", spend:313.74, imp:9861,  freq:0, cpm:31.82, ctr:0.5578, platformRoas:null},
-  {name:"Mom & Daughter · Family Builders",             channel:"reddit", adset:"ret", spend:235.28, imp:7122,  freq:0, cpm:33.04, ctr:0.3931, platformRoas:null},
-  {name:"Up to 20% Off · Sandwich Gen (Text)",          channel:"reddit", adset:"ret", spend:207.08, imp:6461,  freq:0, cpm:32.05, ctr:0.4334, platformRoas:null},
-  {name:"Up to 20% Off · Older Parents (Text)",         channel:"reddit", adset:"ret", spend:197.36, imp:6091,  freq:0, cpm:32.40, ctr:0.4104, platformRoas:null},
-  {name:"Dad/Teen/Grandpa · Sandwich Gen",              channel:"reddit", adset:"ret", spend:180.96, imp:5709,  freq:0, cpm:31.70, ctr:0.4905, platformRoas:null},
-  {name:"Soccer Mom · Sandwich Gen (Push Notif)",       channel:"reddit", adset:"ret", spend:169.43, imp:4986,  freq:0, cpm:33.98, ctr:0.4813, platformRoas:null},
-  {name:"Family Gathering · Older Parents (Push Notif)",channel:"reddit", adset:"ret", spend:151.69, imp:4812,  freq:0, cpm:31.52, ctr:0.4572, platformRoas:null}
+  // Ad group: EPPage/CartAbandoners
+  {name:"Up to 20% Off · Family Builders (Text)",        channel:"reddit", adset:"ret", spend:518.17, imp:16430, freq:0, cpm:31.54, ctr:0.5417, platformRoas:null},
+  {name:"Young Mom Playground · Family Builders",        channel:"reddit", adset:"ret", spend:469.02, imp:16011, freq:0, cpm:29.29, ctr:0.5371, platformRoas:2.65},
+  {name:"Grandparents & Grandkid · Older Parents",       channel:"reddit", adset:"ret", spend:467.12, imp:15285, freq:0, cpm:30.56, ctr:0.4907, platformRoas:0.09},
+  {name:"Up to 20% Off · Older Parents (Text)",          channel:"reddit", adset:"ret", spend:393.13, imp:13981, freq:0, cpm:28.12, ctr:0.4363, platformRoas:null},
+  {name:"Mom & Daughter · Family Builders",              channel:"reddit", adset:"ret", spend:372.75, imp:12521, freq:0, cpm:29.77, ctr:0.4313, platformRoas:null},
+  {name:"Dad/Teen/Grandpa · Sandwich Gen",               channel:"reddit", adset:"ret", spend:352.43, imp:12439, freq:0, cpm:28.33, ctr:0.4502, platformRoas:null},
+  {name:"Soccer Mom · Sandwich Gen (Push Notif)",        channel:"reddit", adset:"ret", spend:293.78, imp:10096, freq:0, cpm:29.10, ctr:0.5943, platformRoas:null},
+  {name:"Up to 20% Off · Sandwich Gen (Text)",           channel:"reddit", adset:"ret", spend:286.50, imp:9692,  freq:0, cpm:29.56, ctr:0.4953, platformRoas:null},
+  {name:"Family Gathering · Older Parents (Push Notif)", channel:"reddit", adset:"ret", spend:240.20, imp:8412,  freq:0, cpm:28.55, ctr:0.5112, platformRoas:1.39}
 ];
 
-// Meta Retargeting creatives — Meta Ads API, Aug 3–10 (same across all periods)
-// freq = adset-level frequency (CartAbandoners-MAWM: 3.60x, CartAbandoners base EP: 3.83x)
+// Meta Retargeting creatives — Meta Ads API, Aug 3–16 (same across all periods)
+// freq = adset-level frequency (EP Evergreen: 4.62x, MAWM RET: 4.24x)
+// Baby Book & Stories ROAS inflated by minimal spend ($2–3) — not statistically meaningful
 const _META_ADS = [
-  // Ad group: cartabandoners-mawm (MAWM-specific)
-  {name:"Up to 20% Off (Text Only)",                     channel:"meta", adset:"ret", spend:627,  imp:31217, freq:3.60, cpm:20.10, ctr:0.76, platformRoas:3.12},
-  {name:"Young Mom · Family Builders",              channel:"meta", adset:"ret", spend:36,   imp:1311,  freq:3.60, cpm:27.64, ctr:0.69, platformRoas:null},
-  {name:"Family Gathering · Older Parents",         channel:"meta", adset:"ret", spend:32,   imp:1107,  freq:3.60, cpm:29.05, ctr:1.81, platformRoas:null},
-  {name:"Soccer Mom · Sandwich Gen",                channel:"meta", adset:"ret", spend:14,   imp:427,   freq:3.60, cpm:33.00, ctr:0.70, platformRoas:null},
-  {name:"Grandparents & Grandkid · Older Parents",  channel:"meta", adset:"ret", spend:13,   imp:684,   freq:3.60, cpm:19.31, ctr:1.46, platformRoas:null},
-  {name:"Mom & Daughter · Family Builders",         channel:"meta", adset:"ret", spend:9,    imp:402,   freq:3.60, cpm:21.77, ctr:1.24, platformRoas:null},
-  {name:"Dad/Teen/Grandpa · Sandwich Gen",          channel:"meta", adset:"ret", spend:3,    imp:94,    freq:3.60, cpm:34.47, ctr:3.19, platformRoas:null},
-  // Ad group: cartabandoners (base EP)
-  {name:"Attorney Anne: Don't Start Alone",              channel:"meta", adset:"ret", spend:70,   imp:2381,  freq:3.83, cpm:29.48, ctr:1.39, platformRoas:null},
-  {name:"True/False 34s: Complicated & Expensive",       channel:"meta", adset:"ret", spend:15,   imp:380,   freq:3.83, cpm:40.61, ctr:0.53, platformRoas:null},
-  {name:"Dad & Daughter: Start in Minutes",              channel:"meta", adset:"ret", spend:11,   imp:402,   freq:3.83, cpm:28.21, ctr:1.49, platformRoas:null},
-  {name:"Phone/Keys/Will: Affordability",                channel:"meta", adset:"ret", spend:7,    imp:192,   freq:3.83, cpm:35.78, ctr:0.52, platformRoas:null},
-  {name:"True/False 22s: Complicated & Expensive",       channel:"meta", adset:"ret", spend:5,    imp:113,   freq:3.83, cpm:45.66, ctr:0.88, platformRoas:null},
-  {name:"True/False 62s: Complicated & Expensive",       channel:"meta", adset:"ret", spend:3,    imp:51,    freq:3.83, cpm:49.02, ctr:3.92, platformRoas:null},
-  {name:"Baby Book: Start Your Will/Trust",              channel:"meta", adset:"ret", spend:2,    imp:67,    freq:3.83, cpm:28.36, ctr:1.49, platformRoas:110.53},
-  {name:"Stories: Pass Down #1",                         channel:"meta", adset:"ret", spend:1,    imp:44,    freq:3.83, cpm:30.45, ctr:2.27, platformRoas:48.51}
+  // Ad set: EP Evergreen Retargeting (52600345507351)
+  {name:"Up to 20% Off (Text Only)",                          channel:"meta", adset:"ret", spend:1198, imp:61370, freq:4.62, cpm:19.51, ctr:0.84, platformRoas:1.94},
+  {name:"Young Mom Playground · Family Builders (Push)",      channel:"meta", adset:"ret", spend:49,   imp:1636,  freq:4.62, cpm:29.74, ctr:1.65, platformRoas:null},
+  {name:"Family Gathering · Older Parents (Push Notif)",      channel:"meta", adset:"ret", spend:35,   imp:1228,  freq:4.62, cpm:28.32, ctr:2.28, platformRoas:null},
+  {name:"Grandparents & Grandkid · Older Parents",            channel:"meta", adset:"ret", spend:26,   imp:1171,  freq:4.62, cpm:22.22, ctr:1.45, platformRoas:null},
+  {name:"Soccer Mom · Sandwich Gen (Push Notif)",             channel:"meta", adset:"ret", spend:23,   imp:783,   freq:4.62, cpm:29.31, ctr:1.40, platformRoas:null},
+  {name:"Mom & Daughter · Family Builders",                   channel:"meta", adset:"ret", spend:14,   imp:587,   freq:4.62, cpm:23.85, ctr:1.53, platformRoas:null},
+  {name:"Dad/Teen/Grandpa · Sandwich Gen",                    channel:"meta", adset:"ret", spend:4,    imp:116,   freq:4.62, cpm:33.10, ctr:2.59, platformRoas:null},
+  // Ad set: MAWM Retargeting (6953341719747)
+  {name:"MAWM | Attorney Anne: Don't Start Alone",            channel:"meta", adset:"ret", spend:119,  imp:3864,  freq:4.24, cpm:30.68, ctr:1.68, platformRoas:null},
+  {name:"MAWM | True/False 34s: Complicated & Expensive",     channel:"meta", adset:"ret", spend:16,   imp:392,   freq:4.24, cpm:40.82, ctr:1.02, platformRoas:null},
+  {name:"MAWM | True/False 22s: Complicated & Expensive",     channel:"meta", adset:"ret", spend:16,   imp:353,   freq:4.24, cpm:44.39, ctr:0.85, platformRoas:null},
+  {name:"MAWM | Dad & Daughter: Start in Minutes",            channel:"meta", adset:"ret", spend:13,   imp:460,   freq:4.24, cpm:29.15, ctr:1.52, platformRoas:null},
+  {name:"MAWM | Phone/Keys/Will: Affordability",              channel:"meta", adset:"ret", spend:12,   imp:322,   freq:4.24, cpm:36.06, ctr:0.93, platformRoas:null},
+  {name:"MAWM | True/False 62s: Complicated & Expensive",     channel:"meta", adset:"ret", spend:6,    imp:146,   freq:4.24, cpm:40.21, ctr:1.37, platformRoas:20.31},
+  {name:"MAWM | Baby Book: Start Your Will/Trust",            channel:"meta", adset:"ret", spend:3,    imp:100,   freq:4.24, cpm:25.20, ctr:2.00, platformRoas:83.33},
+  {name:"MAWM | Stories: Pass Down #1",                       channel:"meta", adset:"ret", spend:2,    imp:54,    freq:4.24, cpm:29.44, ctr:5.56, platformRoas:40.88}
 ];
 
 const PERIODS = {
   l7d:{
-    label:"L7D", range:"Aug 4 – Aug 10, 2026",
+    label:"Aug 10–16", range:"Aug 10 – Aug 16, 2026",
     adsets:[
-      {label:'Reddit PRS - Older Parents',     channel:'reddit', type:'PRS', color:'#FF4500', spend:9802,  imp:380127, reach:0, freq:1.39, cpm:25.79, ctr:0.91, conv:20.18, ltv:4999, roas:0.51},
-      {label:'Reddit PRS - Family + Sandwich', channel:'reddit', type:'PRS', color:'#FF6534', spend:9788,  imp:267510, reach:0, freq:1.39, cpm:36.59, ctr:1.44, conv:14.38, ltv:3915, roas:0.40},
-      {label:'Reddit - Retargeting', channel:'reddit', type:'RET', color:'#c0392b', spend:2185,  imp:66450,  reach:0, freq:6.53, cpm:32.88, ctr:0.47, conv:1.88, ltv:481, roas:0.22},
-      {label:'Meta - EP Evergreen Retargeting',  channel:'meta',   type:'RET', color:'#0a5bc4', spend:661,   imp:31082,  reach:0, freq:3.60, cpm:21.27, ctr:0.86, conv:4.70, ltv:1097, roas:1.66},
-      {label:'Meta - MAWM Retargeting', channel:'meta', type:'RET', color:'#2473ae', spend:103, imp:3700,   reach:0, freq:3.83, cpm:27.84, ctr:0.86, conv:1.03, ltv:340,  roas:3.30}
+      {label:'Reddit PRS - Older Parents',      channel:'reddit', type:'PRS', color:'#FF4500', spend:5483,  imp:179138, reach:0, freq:0, cpm:30.61, ctr:1.0958, conv:19.84, ltv:5359, roas:0.977},
+      {label:'Reddit PRS - Family + Sandwich',  channel:'reddit', type:'PRS', color:'#FF6534', spend:5479,  imp:153468, reach:0, freq:0, cpm:35.70, ctr:1.4863, conv:17.55, ltv:4890, roas:0.892},
+      {label:'Reddit - Retargeting',            channel:'reddit', type:'RET', color:'#c0392b', spend:1587,  imp:60709,  reach:0, freq:0, cpm:26.13, ctr:0.5288, conv:2.07,  ltv:1212, roas:0.764},
+      {label:'Meta - EP Evergreen Retargeting', channel:'meta',   type:'RET', color:'#0a5bc4', spend:668,   imp:33998,  reach:9410, freq:3.61, cpm:19.64, ctr:0.79, conv:6.05,  ltv:1142, roas:1.686},
+      {label:'Meta - MAWM Retargeting',         channel:'meta',   type:'RET', color:'#2473ae', spend:80,    imp:2304,   reach:645,  freq:3.57, cpm:34.66, ctr:1.56, conv:0.64,  ltv:160,  roas:2.005}
     ],
     ads: [].concat(_REDDIT_ADS_PRS, _REDDIT_ADS_RET, _META_ADS)
   },
   l14d:{
-    label:"L14D", range:"Jul 28 – Aug 10, 2026",
+    label:"Aug 3–9", range:"Aug 3 – Aug 9, 2026",
     adsets:[
-      {label:'Reddit PRS - Older Parents',     channel:'reddit', type:'PRS', color:'#FF4500', spend:9802,  imp:380127, reach:0, freq:1.39, cpm:25.79, ctr:0.91, conv:20.18, ltv:4999, roas:0.51},
-      {label:'Reddit PRS - Family + Sandwich', channel:'reddit', type:'PRS', color:'#FF6534', spend:9788,  imp:267510, reach:0, freq:1.39, cpm:36.59, ctr:1.44, conv:14.38, ltv:3915, roas:0.40},
-      {label:'Reddit - Retargeting', channel:'reddit', type:'RET', color:'#c0392b', spend:2185,  imp:66450,  reach:0, freq:6.53, cpm:32.88, ctr:0.47, conv:1.88, ltv:481, roas:0.22},
-      {label:'Meta - EP Evergreen Retargeting',  channel:'meta',   type:'RET', color:'#0a5bc4', spend:793,   imp:36330,  reach:0, freq:3.60, cpm:21.83, ctr:0.80, conv:5.64, ltv:1316, roas:1.66},
-      {label:'Meta - MAWM Retargeting', channel:'meta', type:'RET', color:'#2473ae', spend:124, imp:5670,   reach:0, freq:3.83, cpm:21.83, ctr:0.80, conv:1.24, ltv:409,  roas:3.30}
-    ],
-    ads: [].concat(_REDDIT_ADS_PRS, _REDDIT_ADS_RET, _META_ADS)
-  },
-  l30d:{
-    label:"L30D", range:"Jul 12 – Aug 10, 2026",
-    // NOTE: Meta L30D MTA includes pre-MAWM campaign history (base EP RET running before 8/3)
-    adsets:[
-      {label:'Reddit PRS - Older Parents',     channel:'reddit', type:'PRS', color:'#FF4500', spend:9802,  imp:380127, reach:0, freq:1.39, cpm:25.79, ctr:0.91, conv:20.18, ltv:4999, roas:0.51},
-      {label:'Reddit PRS - Family + Sandwich', channel:'reddit', type:'PRS', color:'#FF6534', spend:9788,  imp:267510, reach:0, freq:1.39, cpm:36.59, ctr:1.44, conv:14.38, ltv:3915, roas:0.40},
-      {label:'Reddit - Retargeting', channel:'reddit', type:'RET', color:'#c0392b', spend:2185,  imp:66450,  reach:0, freq:6.53, cpm:32.88, ctr:0.47, conv:1.88, ltv:481, roas:0.22},
-      {label:'Meta - EP Evergreen Retargeting',  channel:'meta',   type:'RET', color:'#0a5bc4', spend:793,   imp:36330,  reach:0, freq:3.60, cpm:21.83, ctr:0.80, conv:15, ltv:4012, roas:5.06},
-      {label:'Meta - MAWM Retargeting', channel:'meta', type:'RET', color:'#2473ae', spend:124, imp:5670,   reach:0, freq:3.83, cpm:21.83, ctr:0.80, conv:1.24, ltv:409,  roas:3.30}
-    ],
-    ads: [].concat(_REDDIT_ADS_PRS, _REDDIT_ADS_RET, _META_ADS)
-  },
-  l60d:{
-    label:"L60D", range:"Jun 12 – Aug 10, 2026",
-    // NOTE: Meta L60D MTA includes pre-MAWM campaign history (base EP RET running before 8/3)
-    adsets:[
-      {label:'Reddit PRS - Older Parents',     channel:'reddit', type:'PRS', color:'#FF4500', spend:9802,  imp:380127, reach:0, freq:1.39, cpm:25.79, ctr:0.91, conv:20.18, ltv:4999, roas:0.51},
-      {label:'Reddit PRS - Family + Sandwich', channel:'reddit', type:'PRS', color:'#FF6534', spend:9788,  imp:267510, reach:0, freq:1.39, cpm:36.59, ctr:1.44, conv:14.38, ltv:3915, roas:0.40},
-      {label:'Reddit - Retargeting', channel:'reddit', type:'RET', color:'#c0392b', spend:2185,  imp:66450,  reach:0, freq:6.53, cpm:32.88, ctr:0.47, conv:1.88, ltv:481, roas:0.22},
-      {label:'Meta - EP Evergreen Retargeting',  channel:'meta',   type:'RET', color:'#0a5bc4', spend:793,   imp:36330,  reach:0, freq:3.60, cpm:21.83, ctr:0.80, conv:22, ltv:5210, roas:6.57},
-      {label:'Meta - MAWM Retargeting', channel:'meta', type:'RET', color:'#2473ae', spend:124, imp:5670,   reach:0, freq:3.83, cpm:21.83, ctr:0.80, conv:1.24, ltv:409,  roas:3.30}
+      {label:'Reddit PRS - Older Parents',      channel:'reddit', type:'PRS', color:'#FF4500', spend:8537,  imp:342857, reach:0, freq:0, cpm:24.90, ctr:0.876,  conv:15.98, ltv:3561, roas:0.417},
+      {label:'Reddit PRS - Family + Sandwich',  channel:'reddit', type:'PRS', color:'#FF6534', spend:8530,  imp:226930, reach:0, freq:0, cpm:37.59, ctr:1.424,  conv:10.64, ltv:2912, roas:0.341},
+      {label:'Reddit - Retargeting',            channel:'reddit', type:'RET', color:'#c0392b', spend:1806,  imp:54158,  reach:0, freq:0, cpm:33.35, ctr:0.463,  conv:1.61,  ltv:346,  roas:0.192},
+      {label:'Meta - EP Evergreen Retargeting', channel:'meta',   type:'RET', color:'#0a5bc4', spend:671,   imp:32893,  reach:5060, freq:3.50, cpm:20.40, ctr:1.03,  conv:4.12,  ltv:710,  roas:1.082},
+      {label:'Meta - MAWM Retargeting',         channel:'meta',   type:'RET', color:'#2473ae', spend:105,   imp:3387,   reach:696,  freq:3.30, cpm:31.00, ctr:1.56,  conv:1.20,  ltv:397,  roas:3.506}
     ],
     ads: [].concat(_REDDIT_ADS_PRS, _REDDIT_ADS_RET, _META_ADS)
   },
   sl:{
-    label:"Since Launch", range:"Aug 3 – Aug 10, 2026",
+    label:"Since Launch", range:"Aug 3 – Aug 16, 2026",
     adsets:[
-      {label:'Reddit PRS - Older Parents',     channel:'reddit', type:'PRS', color:'#FF4500', spend:9802,  imp:380127, reach:0, freq:1.39, cpm:25.79, ctr:0.91, conv:20.18, ltv:4999, roas:0.51},
-      {label:'Reddit PRS - Family + Sandwich', channel:'reddit', type:'PRS', color:'#FF6534', spend:9788,  imp:267510, reach:0, freq:1.39, cpm:36.59, ctr:1.44, conv:14.38, ltv:3915, roas:0.40},
-      {label:'Reddit - Retargeting', channel:'reddit', type:'RET', color:'#c0392b', spend:2185,  imp:66450,  reach:0, freq:6.53, cpm:32.88, ctr:0.47, conv:1.88, ltv:481, roas:0.22},
-      {label:'Meta - EP Evergreen Retargeting',  channel:'meta',   type:'RET', color:'#0a5bc4', spend:722,   imp:35261,  reach:9802, freq:3.60, cpm:20.48, ctr:0.86, conv:5.14, ltv:1198, roas:1.66},
-      {label:'Meta - MAWM Retargeting', channel:'meta', type:'RET', color:'#2473ae', spend:120, imp:3633,   reach:948, freq:3.83, cpm:33.02, ctr:0.86, conv:1.20, ltv:398,  roas:3.30}
+      {label:'Reddit PRS - Older Parents',      channel:'reddit', type:'PRS', color:'#FF4500', spend:14020, imp:521995, reach:0, freq:0, cpm:26.86, ctr:0.9512, conv:35.82, ltv:8920, roas:0.636},
+      {label:'Reddit PRS - Family + Sandwich',  channel:'reddit', type:'PRS', color:'#FF6534', spend:14009, imp:380398, reach:0, freq:0, cpm:36.83, ctr:1.4490, conv:28.20, ltv:7802, roas:0.557},
+      {label:'Reddit - Retargeting',            channel:'reddit', type:'RET', color:'#c0392b', spend:3393,  imp:114867, reach:0, freq:0, cpm:29.54, ctr:0.4980, conv:3.68,  ltv:1559, roas:0.459},
+      {label:'Meta - EP Evergreen Retargeting', channel:'meta',   type:'RET', color:'#0a5bc4', spend:1348,  imp:66891,  reach:14470, freq:4.62, cpm:20.15, ctr:0.91, conv:10.18, ltv:1852, roas:1.389},
+      {label:'Meta - MAWM Retargeting',         channel:'meta',   type:'RET', color:'#2473ae', spend:185,   imp:5691,   reach:1341,  freq:4.24, cpm:32.54, ctr:1.56, conv:1.84,  ltv:557,  roas:2.886}
     ],
     ads: [].concat(_REDDIT_ADS_PRS, _REDDIT_ADS_RET, _META_ADS)
   }
@@ -340,8 +317,8 @@ const PERIODS = {
 
 // ── helpers ──────────────────────────────────────────────────
 var CHARTS={}, CUR_TAB='s', PERF_INIT=false, CUR_ADSETS=[], CUR_ADS=[];
-const PRESET_KEYS=['sl','l7d'];
-const PRESET_IDS=['bp-sl','bp-l7d'];
+const PRESET_KEYS=['sl','l7d','l14d'];
+const PRESET_IDS=['bp-sl','bp-l7d','bp-l14d'];
 
 function fmt$(n){return n>=1e6?'$'+(n/1e6).toFixed(1)+'M':n>=1000?'$'+(n/1000).toFixed(0)+'k':'$'+n.toFixed(0);}
 function fmtFull$(n){return'$'+Math.round(n).toLocaleString('en-US');}
