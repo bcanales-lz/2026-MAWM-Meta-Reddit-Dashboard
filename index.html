@@ -46,6 +46,13 @@ body{font-family:var(--font);background:var(--bg3);color:var(--tx1);min-height:1
 .mini-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:6px;}
 .dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:middle;flex-shrink:0;}
 .foot{font-size:11px;color:var(--tx2);margin:8px 0 0;line-height:1.5;}
+.tile-d{font-size:11px;margin:3px 0 0;height:14px;}
+.dup{color:var(--txs);font-weight:500;}
+.ddn{color:var(--txd);font-weight:500;}
+.dnew{color:var(--tx3);font-style:italic;}
+.wow-up{color:var(--txs);font-size:10px;font-weight:600;white-space:nowrap;}
+.wow-dn{color:var(--txd);font-size:10px;font-weight:600;white-space:nowrap;}
+.wow-new{color:var(--tx3);font-size:10px;font-style:italic;}
 .section-label{font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin:14px 0 8px;padding-left:2px;}
 .section-label:first-child{margin-top:0;}
 table{width:100%;border-collapse:collapse;font-size:12px;}
@@ -65,14 +72,14 @@ tr:last-child td{border-bottom:none;}
 <div class="hdr">
   <div class="hdr-row">
     <div>
-      <p class="hdr-sub">Reddit Ads + Meta Ads &middot; Estate Planning &middot; <span id="mtaNote" style="color:var(--tx3);">Live data &mdash; Snowflake WEB_METRICS &middot; Updated Aug 16, 2026</span></p>
+      <p class="hdr-sub">Reddit Ads + Meta Ads &middot; Estate Planning &middot; <span id="mtaNote" style="color:var(--tx3);">Live data &mdash; Rockerbox MTA &middot; Updated Aug 23, 2026</span></p>
       <p class="hdr-title">Reddit &amp; Meta &ndash; Make a Will Month 2026</p>
     </div>
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
       <div class="ctrl">
-        <button class="btn-p on" id="bp-sl"  onclick="setPeriod('sl')">Since Launch</button>
-        <button class="btn-p" id="bp-l7d" onclick="setPeriod('l7d')">Aug 10–16</button>
-        <button class="btn-p" id="bp-l14d" onclick="setPeriod('l14d')">Aug 3–9</button>
+        <button class="btn-p" id="bp-sl"  onclick="setPeriod('sl')">Since Launch</button>
+        <button class="btn-p on" id="bp-l7d" onclick="setPeriod('l7d')">Last 7D</button>
+        <button class="btn-p" id="bp-l14d" onclick="setPeriod('l14d')">Last 14D</button>
       </div>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
         <span id="rangeLabel" style="font-size:11px;color:var(--tx3);">— data pending —</span>
@@ -85,11 +92,11 @@ tr:last-child td{border-bottom:none;}
 
 <!-- Summary tiles -->
 <div class="tiles">
-  <div class="tile"><p class="tile-l">Total spend</p><p class="tile-v muted" id="t-spend">—</p></div>
+  <div class="tile"><p class="tile-l">Total spend</p><p class="tile-v muted" id="t-spend">—</p><p class="tile-d" id="d-spend"></p></div>
   <div class="tile"><p class="tile-l">Impressions</p><p class="tile-v muted" id="t-imp">—</p></div>
-  <div class="tile"><p class="tile-l">MTA Conversions</p><p class="tile-v muted" id="t-conv">—</p></div>
+  <div class="tile"><p class="tile-l">MTA Conversions</p><p class="tile-v muted" id="t-conv">—</p><p class="tile-d" id="d-conv"></p></div>
   <div class="tile"><p class="tile-l">Revenue (MTA)</p><p class="tile-v muted" id="t-ltv">—</p></div>
-  <div class="tile"><p class="tile-l">ROAS (MTA)</p><p class="tile-v muted" id="t-roas">—</p></div>
+  <div class="tile"><p class="tile-l">ROAS (MTA)</p><p class="tile-v muted" id="t-roas">—</p><p class="tile-d" id="d-roas"></p></div>
   <div class="tile"><p class="tile-l">Active ads</p><p class="tile-v muted" id="t-liveads">—</p></div>
 </div>
 
@@ -106,10 +113,10 @@ tr:last-child td{border-bottom:none;}
 <div class="pane on" id="c-s">
   <div class="card">
     <p class="card-h">Ad set breakdown by channel</p>
-    <p class="section-label">Reddit</p>
-    <div class="g2" id="adsetCardsReddit" style="margin-bottom:12px;"></div>
-    <p class="section-label">Meta</p>
-    <div class="g2" id="adsetCardsMeta"></div>
+    <p class="section-label">Reddit &mdash; Prospecting</p>
+    <div class="g2" id="adsetCardsPRS" style="margin-bottom:12px;"></div>
+    <p class="section-label">Retargeting</p>
+    <div class="g2" id="adsetCardsRET"></div>
   </div>
   <div class="card">
     <p class="card-h">MTA ROAS by campaign</p>
@@ -127,7 +134,7 @@ tr:last-child td{border-bottom:none;}
         <th class="r">Spend</th><th class="r">Impr.</th><th class="r">Reach</th>
         <th class="r">Freq</th><th class="r">CPM</th><th class="r">CTR</th>
         <th class="r">Conversions</th><th class="r">Rev.(MTA)</th>
-        <th class="r">ROAS&dagger;</th>
+        <th class="r">ROAS&dagger;</th><th class="r">WoW ROAS</th>
       </tr></thead>
       <tbody id="adsetTbody"></tbody>
     </table></div>
@@ -143,7 +150,7 @@ tr:last-child td{border-bottom:none;}
 <div class="pane" id="c-c">
   <div class="note">Creative-level ROAS = platform-reported (spend-weighted avg). <strong>Not MTA.</strong> Reddit: <em>CONVERSION_ROAS</em> from RAW.REDDIT_ADS.AD_REPORT via Snowflake FiveTran. Meta: <em>website_purchase_roas</em> from Meta Ads API. Meta Freq = adset-level. Meta ads show — where no platform purchase was attributed (low-spend creatives). Baby Book &amp; Stories Meta ROAS are high due to minimal spend ($1–2).</div>
 
-  <p class="section-label">Reddit &mdash; Prospecting</p>
+  <p class="section-label">Reddit &mdash; Prospecting (PRS)</p>
   <div class="card" style="margin-bottom:10px;">
     <div style="overflow-x:auto;"><table>
       <thead><tr>
@@ -154,6 +161,20 @@ tr:last-child td{border-bottom:none;}
       </tr></thead>
       <tbody id="adTbodyRdtPRS"></tbody>
     </table></div>
+  </div>
+
+  <p class="section-label">Reddit &mdash; Prospecting Max (new · launched Aug 17)</p>
+  <div class="card" style="margin-bottom:10px;">
+    <div style="overflow-x:auto;"><table>
+      <thead><tr>
+        <th style="min-width:180px;">Ad / Creative</th><th>Status</th>
+        <th class="r">Spend</th><th class="r">Impr.</th>
+        <th class="r">CPM</th><th class="r">CTR</th>
+        <th class="r">ROAS (Platform)</th>
+      </tr></thead>
+      <tbody id="adTbodyRdtPRSMax"></tbody>
+    </table></div>
+    <p class="foot">Reddit Prospecting Max ad-level creative data pending FiveTran pull (campaign launched Aug 17). Platform ROAS not yet available.</p>
   </div>
 
   <p class="section-label">Reddit &mdash; Retargeting</p>
@@ -187,6 +208,7 @@ tr:last-child td{border-bottom:none;}
       <p class="card-h" style="margin:0;">CTR by ad <span style="font-size:11px;font-weight:400;color:var(--tx3);">&mdash; all active ads, sorted desc</span></p>
       <div style="display:flex;gap:10px;font-size:11px;color:var(--tx2);align-items:center;flex-wrap:wrap;">
         <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;background:#FF4500;border-radius:2px;display:inline-block;"></span>Reddit PRS</span>
+        <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;background:#FF8C00;border-radius:2px;display:inline-block;"></span>Reddit PRS Max</span>
         <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;background:#c0392b;border-radius:2px;display:inline-block;"></span>Reddit RET</span>
         <span style="display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;background:#0a5bc4;border-radius:2px;display:inline-block;"></span>Meta RET</span>
       </div>
@@ -217,11 +239,12 @@ tr:last-child td{border-bottom:none;}
 ================================================================ -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
 <script>
-// ── REAL DATA — sourced from Snowflake (CAM_SPEND_DAILY + WEB_METRICS MTA) ──
-// Campaign launch: Aug 3, 2026. Data through Aug 16, 2026.
-// Reddit reach/freq: NOT available via Snowflake FiveTran connector.
-// Reddit ad-level ROAS: RAW.REDDIT_ADS.AD_REPORT.CONVERSION_ROAS (spend-weighted avg). Platform only, not MTA.
-// Meta creative ROAS: Meta Ads API website_purchase_roas. Platform only, not MTA.
+// ── REAL DATA — sourced from Rockerbox MTA ──
+// Campaign launch: Aug 3, 2026. MTA data through Aug 23, 2026.
+// Reddit reach/freq: NOT available from Rockerbox; adset impressions estimated via CPM carry-forward for Aug 17–23.
+// Reddit ad-level ROAS: RAW.REDDIT_ADS.AD_REPORT.CONVERSION_ROAS (platform only, not MTA). Creative data through Aug 16.
+// Meta creative ROAS: Meta Ads API website_purchase_roas (platform only, not MTA). Creative data through Aug 16.
+// Reddit PRS Max: new Prospecting Max campaign launched Aug 17, 2026.
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Reddit Prospecting creatives — RAW.REDDIT_ADS.AD_REPORT, Aug 3–16
@@ -240,6 +263,13 @@ const _REDDIT_ADS_PRS = [
   {name:"Mom & Daughter · Family Builders",             channel:"reddit", adset:"prs", spend:1720.58, imp:51599,  freq:0, cpm:33.35, ctr:1.3004, platformRoas:0.10},
   {name:"Wrong Hands 15s · Family/Sandwich Gen",        channel:"reddit", adset:"prs", spend:1284.32, imp:25978,  freq:0, cpm:49.44, ctr:1.6976, platformRoas:null},
   {name:"Wrong Hands 30s · Family/Sandwich Gen",        channel:"reddit", adset:"prs", spend:1043.37, imp:23253,  freq:0, cpm:44.87, ctr:1.5181, platformRoas:0.61}
+];
+
+// Reddit PRS Max creatives — launched Aug 17, 2026. Ad-level FiveTran data pending.
+// Adset rolls up under: lz_ao_pbmih_mid_soc_ps_na_na_na_reddit-pros-ps-redditmax-qstart
+// Aug 17-23: spend=$4,674 | MTA conv=13.45 | MTA rev=$3,663 | ROAS=0.784 (Rockerbox)
+const _REDDIT_ADS_PRS_MAX = [
+  {name:"PRS Max — creative data pending FiveTran pull", channel:"reddit", adset:"prsmax", spend:4674, imp:174600, freq:0, cpm:26.77, ctr:1.080, platformRoas:null}
 ];
 
 // Reddit Retargeting creatives — RAW.REDDIT_ADS.AD_REPORT, Aug 3–16
@@ -281,42 +311,44 @@ const _META_ADS = [
 
 const PERIODS = {
   l7d:{
-    label:"Aug 10–16", range:"Aug 10 – Aug 16, 2026",
+    label:"Aug 17–23", range:"Aug 17 – Aug 23, 2026",
     adsets:[
-      {label:'Reddit PRS - Older Parents',      channel:'reddit', type:'PRS', color:'#FF4500', spend:5483,  imp:179138, reach:0, freq:0, cpm:30.61, ctr:1.0958, conv:19.84, ltv:5359, roas:0.977},
-      {label:'Reddit PRS - Family + Sandwich',  channel:'reddit', type:'PRS', color:'#FF6534', spend:5479,  imp:153468, reach:0, freq:0, cpm:35.70, ctr:1.4863, conv:17.55, ltv:4890, roas:0.892},
-      {label:'Reddit - Retargeting',            channel:'reddit', type:'RET', color:'#c0392b', spend:1587,  imp:60709,  reach:0, freq:0, cpm:26.13, ctr:0.5288, conv:2.07,  ltv:1212, roas:0.764},
-      {label:'Meta - EP Evergreen Retargeting', channel:'meta',   type:'RET', color:'#0a5bc4', spend:668,   imp:33998,  reach:9410, freq:3.61, cpm:19.64, ctr:0.79, conv:6.05,  ltv:1142, roas:1.686},
-      {label:'Meta - MAWM Retargeting',         channel:'meta',   type:'RET', color:'#2473ae', spend:80,    imp:2304,   reach:645,  freq:3.57, cpm:34.66, ctr:1.56, conv:0.64,  ltv:160,  roas:2.005}
+      {label:'Reddit PRS - Older Parents',      channel:'reddit', type:'PRS', color:'#FF4500', spend:2585,  imp:78288,  reach:0, freq:0, cpm:33.02, ctr:1.028,  conv:10.26, ltv:2931, roas:1.134},
+      {label:'Reddit PRS - Family + Sandwich',  channel:'reddit', type:'PRS', color:'#FF6534', spend:2082,  imp:56090,  reach:0, freq:0, cpm:37.12, ctr:1.251,  conv:8.33,  ltv:1788, roas:0.859},
+      {label:'Reddit PRS Max',                  channel:'reddit', type:'PRS', color:'#FF8C00', spend:4674,  imp:174600, reach:0, freq:0, cpm:26.77, ctr:1.080,  conv:13.45, ltv:3663, roas:0.784},
+      {label:'Reddit - Retargeting',            channel:'reddit', type:'RET', color:'#c0392b', spend:1417,  imp:57480,  reach:0, freq:0, cpm:24.65, ctr:0.513,  conv:2.64,  ltv:672,  roas:0.475},
+      {label:'Meta - EP Evergreen Retargeting', channel:'meta',   type:'RET', color:'#0a5bc4', spend:899,   imp:33765,  reach:6629,  freq:5.09, cpm:26.77, ctr:0.91, conv:6.52, ltv:2045, roas:2.275},
+      {label:'Meta - MAWM Retargeting',         channel:'meta',   type:'RET', color:'#2473ae', spend:14,    imp:346,    reach:131,   freq:2.64, cpm:40.32, ctr:1.56, conv:0.07, ltv:1,    roas:0.076}
     ],
-    ads: [].concat(_REDDIT_ADS_PRS, _REDDIT_ADS_RET, _META_ADS)
+    ads: [].concat(_REDDIT_ADS_PRS, _REDDIT_ADS_PRS_MAX, _REDDIT_ADS_RET, _META_ADS)
   },
   l14d:{
-    label:"Aug 3–9", range:"Aug 3 – Aug 9, 2026",
+    label:"Aug 10–16", range:"Aug 10 – Aug 16, 2026",
     adsets:[
-      {label:'Reddit PRS - Older Parents',      channel:'reddit', type:'PRS', color:'#FF4500', spend:8537,  imp:342857, reach:0, freq:0, cpm:24.90, ctr:0.876,  conv:15.98, ltv:3561, roas:0.417},
-      {label:'Reddit PRS - Family + Sandwich',  channel:'reddit', type:'PRS', color:'#FF6534', spend:8530,  imp:226930, reach:0, freq:0, cpm:37.59, ctr:1.424,  conv:10.64, ltv:2912, roas:0.341},
-      {label:'Reddit - Retargeting',            channel:'reddit', type:'RET', color:'#c0392b', spend:1806,  imp:54158,  reach:0, freq:0, cpm:33.35, ctr:0.463,  conv:1.61,  ltv:346,  roas:0.192},
-      {label:'Meta - EP Evergreen Retargeting', channel:'meta',   type:'RET', color:'#0a5bc4', spend:671,   imp:32893,  reach:5060, freq:3.50, cpm:20.40, ctr:1.03,  conv:4.12,  ltv:710,  roas:1.082},
-      {label:'Meta - MAWM Retargeting',         channel:'meta',   type:'RET', color:'#2473ae', spend:105,   imp:3387,   reach:696,  freq:3.30, cpm:31.00, ctr:1.56,  conv:1.20,  ltv:397,  roas:3.506}
+      {label:'Reddit PRS - Older Parents',      channel:'reddit', type:'PRS', color:'#FF4500', spend:5483,  imp:179138, reach:0, freq:0, cpm:30.61, ctr:1.0958, conv:22.61, ltv:5937, roas:1.083},
+      {label:'Reddit PRS - Family + Sandwich',  channel:'reddit', type:'PRS', color:'#FF6534', spend:5479,  imp:153468, reach:0, freq:0, cpm:35.70, ctr:1.4863, conv:17.26, ltv:4955, roas:0.904},
+      {label:'Reddit - Retargeting',            channel:'reddit', type:'RET', color:'#c0392b', spend:1587,  imp:60709,  reach:0, freq:0, cpm:26.13, ctr:0.5288, conv:2.13,  ltv:1213, roas:0.765},
+      {label:'Meta - EP Evergreen Retargeting', channel:'meta',   type:'RET', color:'#0a5bc4', spend:679,   imp:33998,  reach:9410, freq:3.61, cpm:19.94, ctr:0.79,  conv:6.05, ltv:1142, roas:1.682},
+      {label:'Meta - MAWM Retargeting',         channel:'meta',   type:'RET', color:'#2473ae', spend:80,    imp:2304,   reach:645,  freq:3.57, cpm:34.66, ctr:1.56,  conv:0.64, ltv:160,  roas:2.004}
     ],
-    ads: [].concat(_REDDIT_ADS_PRS, _REDDIT_ADS_RET, _META_ADS)
+    ads: [].concat(_REDDIT_ADS_PRS, _REDDIT_ADS_PRS_MAX, _REDDIT_ADS_RET, _META_ADS)
   },
   sl:{
-    label:"Since Launch", range:"Aug 3 – Aug 16, 2026",
+    label:"Since Launch", range:"Aug 3 – Aug 23, 2026",
     adsets:[
-      {label:'Reddit PRS - Older Parents',      channel:'reddit', type:'PRS', color:'#FF4500', spend:14020, imp:521995, reach:0, freq:0, cpm:26.86, ctr:0.9512, conv:35.82, ltv:8920, roas:0.636},
-      {label:'Reddit PRS - Family + Sandwich',  channel:'reddit', type:'PRS', color:'#FF6534', spend:14009, imp:380398, reach:0, freq:0, cpm:36.83, ctr:1.4490, conv:28.20, ltv:7802, roas:0.557},
-      {label:'Reddit - Retargeting',            channel:'reddit', type:'RET', color:'#c0392b', spend:3393,  imp:114867, reach:0, freq:0, cpm:29.54, ctr:0.4980, conv:3.68,  ltv:1559, roas:0.459},
-      {label:'Meta - EP Evergreen Retargeting', channel:'meta',   type:'RET', color:'#0a5bc4', spend:1348,  imp:66891,  reach:14470, freq:4.62, cpm:20.15, ctr:0.91, conv:10.18, ltv:1852, roas:1.389},
-      {label:'Meta - MAWM Retargeting',         channel:'meta',   type:'RET', color:'#2473ae', spend:185,   imp:5691,   reach:1341,  freq:4.24, cpm:32.54, ctr:1.56, conv:1.84,  ltv:557,  roas:2.886}
+      {label:'Reddit PRS - Older Parents',      channel:'reddit', type:'PRS', color:'#FF4500', spend:16605, imp:600283, reach:0, freq:0, cpm:27.66, ctr:0.9512, conv:48.85, ltv:12429, roas:0.749},
+      {label:'Reddit PRS - Family + Sandwich',  channel:'reddit', type:'PRS', color:'#FF6534', spend:16091, imp:436488, reach:0, freq:0, cpm:36.86, ctr:1.4490, conv:36.24, ltv:9655,  roas:0.600},
+      {label:'Reddit PRS Max',                  channel:'reddit', type:'PRS', color:'#FF8C00', spend:4674,  imp:174600, reach:0, freq:0, cpm:26.77, ctr:1.080,  conv:13.45, ltv:3663,  roas:0.784},
+      {label:'Reddit - Retargeting',            channel:'reddit', type:'RET', color:'#c0392b', spend:4810,  imp:172347, reach:0, freq:0, cpm:27.91, ctr:0.4980, conv:6.38,  ltv:2232,  roas:0.464},
+      {label:'Meta - EP Evergreen Retargeting', channel:'meta',   type:'RET', color:'#0a5bc4', spend:2234,  imp:100656, reach:21099, freq:4.77, cpm:22.19, ctr:0.91, conv:16.70, ltv:3897, roas:1.744},
+      {label:'Meta - MAWM Retargeting',         channel:'meta',   type:'RET', color:'#2473ae', spend:207,   imp:6037,   reach:1472,  freq:4.10, cpm:34.29, ctr:1.56, conv:1.91,  ltv:558,  roas:2.693}
     ],
-    ads: [].concat(_REDDIT_ADS_PRS, _REDDIT_ADS_RET, _META_ADS)
+    ads: [].concat(_REDDIT_ADS_PRS, _REDDIT_ADS_PRS_MAX, _REDDIT_ADS_RET, _META_ADS)
   }
 };
 
 // ── helpers ──────────────────────────────────────────────────
-var CHARTS={}, CUR_TAB='s', PERF_INIT=false, CUR_ADSETS=[], CUR_ADS=[];
+var CHARTS={}, CUR_TAB='s', PERF_INIT=false, CUR_ADSETS=[], CUR_ADS=[], CUR_KEY='l7d';
 const PRESET_KEYS=['sl','l7d','l14d'];
 const PRESET_IDS=['bp-sl','bp-l7d','bp-l14d'];
 
@@ -332,7 +364,7 @@ function setPeriod(key){
   var idx=PRESET_KEYS.indexOf(key); if(idx>=0) document.getElementById(PRESET_IDS[idx]).classList.add('on');
   var d=PERIODS[key];
   document.getElementById('rangeLabel').textContent=d.range;
-  PERF_INIT=false; CUR_ADSETS=d.adsets; CUR_ADS=d.ads;
+  PERF_INIT=false; CUR_ADSETS=d.adsets; CUR_ADS=d.ads; CUR_KEY=key;
   renderAll(d);
 }
 
@@ -346,6 +378,22 @@ function showTab(n){
   if(n==='c'&&CUR_ADS.length){setTimeout(function(){renderAdSpendChart(CUR_ADS);},50);}
 }
 
+function wowPct(cur,prev){
+  if(!prev||prev===0) return null;
+  var pct=(cur-prev)/Math.abs(prev)*100;
+  var cls=pct>=0?'dup':'ddn';
+  var arrow=pct>=0?'▲':'▼';
+  return '<span class="'+cls+'">'+arrow+' '+Math.abs(pct).toFixed(1)+'%</span>';
+}
+function wowPctInline(cur,prev){
+  if(prev==null) return '<span class="wow-new">New</span>';
+  if(!prev||prev===0) return '<span class="wow-new">—</span>';
+  var pct=(cur-prev)/Math.abs(prev)*100;
+  var cls=pct>=0?'wow-up':'wow-dn';
+  var arrow=pct>=0?'▲':'▼';
+  return '<span class="'+cls+'">'+arrow+' '+Math.abs(pct).toFixed(1)+'%</span>';
+}
+
 function renderAll(d){
   var adsets=d.adsets,ads=d.ads;
   var totSpend=adsets.reduce(function(s,a){return s+a.spend;},0);
@@ -353,6 +401,22 @@ function renderAll(d){
   var totConv=adsets.reduce(function(s,a){return s+a.conv;},0);
   var totLtv=adsets.reduce(function(s,a){return s+a.ltv;},0);
   var totRoas=totSpend>0?totLtv/totSpend:NaN;
+
+  // WoW deltas — only for l7d vs l14d
+  var prevAdsets=null;
+  var isL7d=(CUR_KEY==='l7d');
+  if(isL7d){
+    prevAdsets=PERIODS['l14d'].adsets;
+    var pSpend=prevAdsets.reduce(function(s,a){return s+a.spend;},0);
+    var pConv=prevAdsets.reduce(function(s,a){return s+a.conv;},0);
+    var pLtv=prevAdsets.reduce(function(s,a){return s+a.ltv;},0);
+    var pRoas=pSpend>0?pLtv/pSpend:NaN;
+    document.getElementById('d-spend').innerHTML=wowPct(totSpend,pSpend)||'';
+    document.getElementById('d-conv').innerHTML=wowPct(totConv,pConv)||'';
+    document.getElementById('d-roas').innerHTML=wowPct(totRoas,pRoas)||'';
+  } else {
+    ['d-spend','d-conv','d-roas'].forEach(function(id){document.getElementById(id).innerHTML='';});
+  }
 
   function setTile(id,val){
     var el=document.getElementById(id);
@@ -366,8 +430,8 @@ function renderAll(d){
   setTile('t-roas',  totSpend?fmtRoas(totRoas):null);
   setTile('t-liveads', ads.length?String(ads.length):null);
 
-  renderOverviewCards(adsets);
-  renderAdsetTable(adsets);
+  renderOverviewCards(adsets, prevAdsets);
+  renderAdsetTable(adsets, prevAdsets);
   renderAdTables(ads);
 
   setTimeout(function(){
@@ -379,21 +443,27 @@ function renderAll(d){
   if(CUR_TAB==='c'&&ads.length){setTimeout(function(){renderAdSpendChart(ads);},50);}
 }
 
-// Aggregate adsets for overview/chart: combine all PRS into one Reddit PRS card,
-// keep RET as-is per channel, combine all Meta RET into one card.
+// Aggregate adsets for overview/chart: combine non-Max PRS into Qstart card,
+// keep PRS Max as its own card, keep RET as-is per channel, combine all Meta RET into one card.
 function getOverviewAdsets(adsets){
   var result=[];
-  var prs=adsets.filter(function(a){return a.channel==='reddit'&&a.type==='PRS';});
-  if(prs.length){
-    var tSpend=prs.reduce(function(s,a){return s+a.spend;},0);
-    var tImp=prs.reduce(function(s,a){return s+a.imp;},0);
-    var tConv=prs.reduce(function(s,a){return s+a.conv;},0);
-    var tLtv=prs.reduce(function(s,a){return s+a.ltv;},0);
-    var wCtr=tImp>0?prs.reduce(function(s,a){return s+(a.ctr*a.imp/100);},0)/tImp*100:0;
-    var wFreq=prs[0].freq;
-    result.push({label:'Reddit - Prospecting',channel:'reddit',type:'PRS',color:'#FF4500',
-      spend:tSpend,imp:tImp,reach:0,freq:wFreq,cpm:tImp>0?tSpend/tImp*1000:0,
+  var prsQstart=adsets.filter(function(a){return a.channel==='reddit'&&a.type==='PRS'&&a.label.indexOf('Max')===-1;});
+  if(prsQstart.length){
+    var tSpend=prsQstart.reduce(function(s,a){return s+a.spend;},0);
+    var tImp=prsQstart.reduce(function(s,a){return s+a.imp;},0);
+    var tConv=prsQstart.reduce(function(s,a){return s+a.conv;},0);
+    var tLtv=prsQstart.reduce(function(s,a){return s+a.ltv;},0);
+    var wCtr=tImp>0?prsQstart.reduce(function(s,a){return s+(a.ctr*a.imp/100);},0)/tImp*100:0;
+    result.push({label:'Reddit - Prospecting Qstart',channel:'reddit',type:'PRS',color:'#FF4500',
+      spend:tSpend,imp:tImp,reach:0,freq:0,cpm:tImp>0?tSpend/tImp*1000:0,
       ctr:wCtr,conv:tConv,ltv:tLtv,roas:tSpend>0?tLtv/tSpend:0});
+  }
+  var prsMax=adsets.filter(function(a){return a.channel==='reddit'&&a.type==='PRS'&&a.label.indexOf('Max')!==-1;});
+  if(prsMax.length){
+    var mx=prsMax[0];
+    result.push({label:'Reddit - Prospecting Max',channel:'reddit',type:'PRS',color:'#FF8C00',
+      spend:mx.spend,imp:mx.imp,reach:0,freq:mx.freq,cpm:mx.cpm,
+      ctr:mx.ctr,conv:mx.conv,ltv:mx.ltv,roas:mx.roas});
   }
   adsets.filter(function(a){return a.channel==='reddit'&&a.type==='RET';}).forEach(function(a){result.push(a);});
   var mret=adsets.filter(function(a){return a.channel==='meta'&&a.type==='RET';});
@@ -412,8 +482,19 @@ function getOverviewAdsets(adsets){
   return result;
 }
 
-function buildCard(a){
+function buildCard(a, prev){
   var noData=!a.spend;
+  var spendDelta='', convDelta='', roasDelta='';
+  if(prev && !noData){
+    spendDelta=wowPctInline(a.spend, prev.spend);
+    convDelta=wowPctInline(a.conv, prev.conv);
+    roasDelta=wowPctInline(a.roas, prev.roas);
+  } else if(prev===null){
+    // new this period — no prev exists in l14d
+    spendDelta='<span class="wow-new">New</span>';
+    convDelta='<span class="wow-new">New</span>';
+    roasDelta='<span class="wow-new">New</span>';
+  }
   return '<div class="inset">'
     +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">'
     +'<span style="font-size:12px;font-weight:500;"><span class="dot" style="background:'+a.color+';"></span>'+a.label+'</span>'
@@ -422,9 +503,9 @@ function buildCard(a){
     +(noData
       ?'<div style="font-size:11px;color:var(--tx3);padding:4px 0;">— data pending —</div>'
       :'<div class="mini-grid">'
-      +'<div><div class="inset-l">Spend</div><div class="inset-v">'+fmt$(a.spend)+'</div></div>'
-      +'<div><div class="inset-l">MTA Conversions</div><div class="inset-v">'+Math.round(a.conv)+'</div></div>'
-      +'<div><div class="inset-l">ROAS</div><div class="inset-v" style="color:'+(a.roas>=1?'var(--txs)':'var(--txd)')+';">'+fmtRoas(a.roas)+'</div></div>'
+      +'<div><div class="inset-l">Spend</div><div class="inset-v">'+fmt$(a.spend)+(spendDelta?' <span style="font-size:10px;font-weight:500;">'+spendDelta+'</span>':'')+'</div></div>'
+      +'<div><div class="inset-l">MTA Conversions</div><div class="inset-v">'+Math.round(a.conv)+(convDelta?' <span style="font-size:10px;font-weight:500;">'+convDelta+'</span>':'')+'</div></div>'
+      +'<div><div class="inset-l">ROAS</div><div class="inset-v" style="color:'+(a.roas>=1?'var(--txs)':'var(--txd)')+';">'+fmtRoas(a.roas)+(roasDelta?' <span style="font-size:10px;font-weight:500;">'+roasDelta+'</span>':'')+'</div></div>'
       +'<div><div class="inset-l">Impressions</div><div class="inset-v" style="font-size:14px;">'+fmtBig(a.imp)+'</div></div>'
       +'<div><div class="inset-l">Frequency</div><div class="inset-v" style="font-size:14px;">'+(a.freq?a.freq.toFixed(1):'—')+'</div></div>'
       +'<div><div class="inset-l">CPM</div><div class="inset-v" style="font-size:14px;">'+fmtCpm(a.cpm)+'</div></div>'
@@ -432,12 +513,23 @@ function buildCard(a){
     +'</div>';
 }
 
-function renderOverviewCards(adsets){
+function renderOverviewCards(adsets, prevAdsets){
   var ov=getOverviewAdsets(adsets);
-  var rdt=ov.filter(function(a){return a.channel==='reddit';});
+  var prevOv=prevAdsets?getOverviewAdsets(prevAdsets):null;
+  // build label→prev lookup
+  var prevMap={};
+  if(prevOv) prevOv.forEach(function(p){prevMap[p.label]=p;});
+  var prs=ov.filter(function(a){return a.channel==='reddit'&&a.type==='PRS';});
+  var rdtRet=ov.filter(function(a){return a.channel==='reddit'&&a.type==='RET';});
   var meta=ov.filter(function(a){return a.channel==='meta';});
-  document.getElementById('adsetCardsReddit').innerHTML=rdt.map(buildCard).join('');
-  document.getElementById('adsetCardsMeta').innerHTML=meta.map(buildCard).join('');
+  document.getElementById('adsetCardsPRS').innerHTML=prs.map(function(a){
+    var prev=prevOv?(prevMap[a.label]||null):undefined;
+    return buildCard(a, prev);
+  }).join('');
+  document.getElementById('adsetCardsRET').innerHTML=rdtRet.concat(meta).map(function(a){
+    var prev=prevOv?(prevMap[a.label]||null):undefined;
+    return buildCard(a, prev);
+  }).join('');
 }
 
 function renderRoasChart(adsets){
@@ -473,9 +565,21 @@ function renderRoasChart(adsets){
   });
 }
 
-function renderAdsetTable(adsets){
+function renderAdsetTable(adsets, prevAdsets){
+  // build label→prev lookup
+  var prevMap={};
+  if(prevAdsets) prevAdsets.forEach(function(p){prevMap[p.label]=p;});
   var rows=adsets.map(function(a){
     var isRdt=a.channel==='reddit';
+    var wowCell='<td class="r" style="font-size:10px;">—</td>';
+    if(prevAdsets){
+      var prev=prevMap[a.label];
+      if(prev){
+        wowCell='<td class="r">'+wowPctInline(a.roas, prev.roas)+'</td>';
+      } else {
+        wowCell='<td class="r"><span class="wow-new">New</span></td>';
+      }
+    }
     return '<tr>'
       +'<td><span style="font-size:11px;font-weight:500;"><span class="dot" style="background:'+a.color+';"></span>'+a.label+'</span></td>'
       +'<td><span class="chip chip-'+(isRdt?'r':'b')+'">'+(isRdt?'Reddit':'Meta')+'</span></td>'
@@ -489,9 +593,10 @@ function renderAdsetTable(adsets){
       +'<td class="r">'+(a.conv?Math.round(a.conv):'—')+'</td>'
       +'<td class="r">'+(a.ltv?fmtFull$(a.ltv):'—')+'</td>'
       +'<td class="r"><strong>'+fmtRoas(a.roas)+'</strong></td>'
+      +wowCell
       +'</tr>';
   }).join('');
-  document.getElementById('adsetTbody').innerHTML=rows||'<tr><td colspan="12" style="color:var(--tx3);text-align:center;padding:14px;">Populate PERIODS data to see results</td></tr>';
+  document.getElementById('adsetTbody').innerHTML=rows||'<tr><td colspan="13" style="color:var(--tx3);text-align:center;padding:14px;">Populate PERIODS data to see results</td></tr>';
 }
 
 function renderPerfChart(adsets){
@@ -537,16 +642,17 @@ function buildCreativeRows(list, showFreq){
 }
 
 function renderAdTables(ads){
-  document.getElementById('adTbodyRdtPRS').innerHTML  = buildCreativeRows(ads.filter(function(a){return a.channel==='reddit'&&a.adset==='prs';}), false);
-  document.getElementById('adTbodyRdtRET').innerHTML  = buildCreativeRows(ads.filter(function(a){return a.channel==='reddit'&&a.adset==='ret';}), false);
-  document.getElementById('adTbodyMetaRET').innerHTML = buildCreativeRows(ads.filter(function(a){return a.channel==='meta'  &&a.adset==='ret';}), true);
+  document.getElementById('adTbodyRdtPRS').innerHTML    = buildCreativeRows(ads.filter(function(a){return a.channel==='reddit'&&a.adset==='prs';}), false);
+  document.getElementById('adTbodyRdtPRSMax').innerHTML = buildCreativeRows(ads.filter(function(a){return a.channel==='reddit'&&a.adset==='prsmax';}), false);
+  document.getElementById('adTbodyRdtRET').innerHTML    = buildCreativeRows(ads.filter(function(a){return a.channel==='reddit'&&a.adset==='ret';}), false);
+  document.getElementById('adTbodyMetaRET').innerHTML   = buildCreativeRows(ads.filter(function(a){return a.channel==='meta'  &&a.adset==='ret';}), true);
 }
 
 function renderAdSpendChart(ads){
   var ctx=document.getElementById('adSpendChart').getContext('2d');
   if(CHARTS.adSpend)CHARTS.adSpend.destroy();
   if(!ads.length){return;}
-  var colorMap={'reddit-prs':'#FF4500cc','reddit-ret':'#c0392bcc','meta-ret':'#0a5bc4cc'};
+  var colorMap={'reddit-prs':'#FF4500cc','reddit-prsmax':'#FF8C00cc','reddit-ret':'#c0392bcc','meta-ret':'#0a5bc4cc'};
   var sorted=ads.slice().sort(function(a,b){return b.ctr-a.ctr;});
   CHARTS.adSpend=new Chart(ctx,{
     type:'bar',
@@ -565,7 +671,7 @@ function renderAdSpendChart(ads){
 }
 
 // init
-setPeriod('sl');
+setPeriod('l7d');
 </script>
 </body>
 </html>
