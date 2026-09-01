@@ -79,7 +79,9 @@ tr:last-child td{border-bottom:none;}
       <div class="ctrl">
         <button class="btn-p" id="bp-sl"  onclick="setPeriod('sl')">Since Launch</button>
         <button class="btn-p on" id="bp-l7d" onclick="setPeriod('l7d')">Last 7D</button>
-        <button class="btn-p" id="bp-l14d" onclick="setPeriod('l14d')">Last 14D</button>
+        <button class="btn-p" id="bp-l14d" onclick="setPeriod('l14d')">Prior 7D</button>
+        <button class="btn-p" id="bp-l14dagg" onclick="setPeriod('l14dagg')">Last 14D</button>
+        <button class="btn-p" id="bp-l30d" onclick="setPeriod('l30d')">Last 30D</button>
       </div>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
         <span id="rangeLabel" style="font-size:11px;color:var(--tx3);">— data pending —</span>
@@ -311,37 +313,64 @@ const _META_ADS = [
 
 const PERIODS = {
   l7d:{
-    label:"Aug 17–23", range:"Aug 17 – Aug 23, 2026",
+    label:"Aug 24–30", range:"Aug 24 – Aug 30, 2026",
     adsets:[
-      {label:'Reddit PRS - Older Parents',      channel:'reddit', type:'PRS', color:'#FF4500', spend:2585,  imp:78288,  reach:0, freq:0, cpm:33.02, ctr:1.028,  conv:10.26, ltv:2931, roas:1.134},
-      {label:'Reddit PRS - Family + Sandwich',  channel:'reddit', type:'PRS', color:'#FF6534', spend:2082,  imp:56090,  reach:0, freq:0, cpm:37.12, ctr:1.251,  conv:8.33,  ltv:1788, roas:0.859},
-      {label:'Reddit PRS Max',                  channel:'reddit', type:'PRS', color:'#FF8C00', spend:4674,  imp:174600, reach:0, freq:0, cpm:26.77, ctr:1.080,  conv:13.45, ltv:3663, roas:0.784},
-      {label:'Reddit - Retargeting',            channel:'reddit', type:'RET', color:'#c0392b', spend:1417,  imp:57480,  reach:0, freq:0, cpm:24.65, ctr:0.513,  conv:2.64,  ltv:672,  roas:0.475},
-      {label:'Meta - EP Evergreen Retargeting', channel:'meta',   type:'RET', color:'#0a5bc4', spend:899,   imp:33765,  reach:6629,  freq:5.09, cpm:26.77, ctr:0.91, conv:6.52, ltv:2045, roas:2.275},
-      {label:'Meta - MAWM Retargeting',         channel:'meta',   type:'RET', color:'#2473ae', spend:14,    imp:346,    reach:131,   freq:2.64, cpm:40.32, ctr:1.56, conv:0.07, ltv:1,    roas:0.076}
+      {label:'Reddit PRS - Older Parents',      channel:'reddit', type:'PRS', color:'#FF4500', spend:4584,  imp:138800, reach:0, freq:0, cpm:33.02, ctr:1.028,  conv:6.84,  ltv:1477, roas:0.322},
+      {label:'Reddit PRS - Family + Sandwich',  channel:'reddit', type:'PRS', color:'#FF6534', spend:2929,  imp:78900,  reach:0, freq:0, cpm:37.12, ctr:1.251,  conv:4.60,  ltv:881,  roas:0.301},
+      {label:'Reddit PRS Max',                  channel:'reddit', type:'PRS', color:'#FF8C00', spend:9745,  imp:364000, reach:0, freq:0, cpm:26.77, ctr:1.080,  conv:18.85, ltv:4558, roas:0.468},
+      {label:'Reddit - Retargeting',            channel:'reddit', type:'RET', color:'#c0392b', spend:1431,  imp:58100,  reach:0, freq:0, cpm:24.65, ctr:0.513,  conv:2.04,  ltv:486,  roas:0.340},
+      {label:'Meta - EP Evergreen Retargeting', channel:'meta',   type:'RET', color:'#0a5bc4', spend:658,   imp:24600,  reach:4852, freq:5.09, cpm:26.77, ctr:0.91, conv:10.03, ltv:1528, roas:2.322},
+      {label:'Meta - MAWM Retargeting',         channel:'meta',   type:'RET', color:'#2473ae', spend:25,    imp:620,    reach:62,   freq:2.64, cpm:40.32, ctr:1.56, conv:0,     ltv:0,    roas:0}
     ],
     ads: [].concat(_REDDIT_ADS_PRS, _REDDIT_ADS_PRS_MAX, _REDDIT_ADS_RET, _META_ADS)
   },
   l14d:{
-    label:"Aug 10–16", range:"Aug 10 – Aug 16, 2026",
+    label:"Aug 17–23", range:"Aug 17 – Aug 23, 2026",
     adsets:[
-      {label:'Reddit PRS - Older Parents',      channel:'reddit', type:'PRS', color:'#FF4500', spend:5483,  imp:179138, reach:0, freq:0, cpm:30.61, ctr:1.0958, conv:22.61, ltv:5937, roas:1.083},
-      {label:'Reddit PRS - Family + Sandwich',  channel:'reddit', type:'PRS', color:'#FF6534', spend:5479,  imp:153468, reach:0, freq:0, cpm:35.70, ctr:1.4863, conv:17.26, ltv:4955, roas:0.904},
-      {label:'Reddit - Retargeting',            channel:'reddit', type:'RET', color:'#c0392b', spend:1587,  imp:60709,  reach:0, freq:0, cpm:26.13, ctr:0.5288, conv:2.13,  ltv:1213, roas:0.765},
-      {label:'Meta - EP Evergreen Retargeting', channel:'meta',   type:'RET', color:'#0a5bc4', spend:679,   imp:33998,  reach:9410, freq:3.61, cpm:19.94, ctr:0.79,  conv:6.05, ltv:1142, roas:1.682},
-      {label:'Meta - MAWM Retargeting',         channel:'meta',   type:'RET', color:'#2473ae', spend:80,    imp:2304,   reach:645,  freq:3.57, cpm:34.66, ctr:1.56,  conv:0.64, ltv:160,  roas:2.004}
+      {label:'Reddit PRS - Older Parents',      channel:'reddit', type:'PRS', color:'#FF4500', spend:2585,  imp:78288,  reach:0, freq:0, cpm:33.02, ctr:1.028,  conv:11.11, ltv:3090, roas:1.195},
+      {label:'Reddit PRS - Family + Sandwich',  channel:'reddit', type:'PRS', color:'#FF6534', spend:2082,  imp:56090,  reach:0, freq:0, cpm:37.12, ctr:1.251,  conv:8.24,  ltv:1860, roas:0.893},
+      {label:'Reddit PRS Max',                  channel:'reddit', type:'PRS', color:'#FF8C00', spend:4673,  imp:174600, reach:0, freq:0, cpm:26.77, ctr:1.080,  conv:14.64, ltv:3970, roas:0.850},
+      {label:'Reddit - Retargeting',            channel:'reddit', type:'RET', color:'#c0392b', spend:1417,  imp:57480,  reach:0, freq:0, cpm:24.65, ctr:0.513,  conv:3.19,  ltv:691,  roas:0.487},
+      {label:'Meta - EP Evergreen Retargeting', channel:'meta',   type:'RET', color:'#0a5bc4', spend:901,   imp:33765,  reach:6629, freq:5.09, cpm:26.77, ctr:0.91, conv:6.52,  ltv:2045, roas:2.270},
+      {label:'Meta - MAWM Retargeting',         channel:'meta',   type:'RET', color:'#2473ae', spend:14,    imp:346,    reach:131,  freq:2.64, cpm:40.32, ctr:1.56, conv:0.07,  ltv:1,    roas:0.076}
     ],
     ads: [].concat(_REDDIT_ADS_PRS, _REDDIT_ADS_PRS_MAX, _REDDIT_ADS_RET, _META_ADS)
   },
   sl:{
-    label:"Since Launch", range:"Aug 3 – Aug 23, 2026",
+    label:"Since Launch", range:"Aug 3 – Aug 30, 2026",
     adsets:[
-      {label:'Reddit PRS - Older Parents',      channel:'reddit', type:'PRS', color:'#FF4500', spend:16605, imp:600283, reach:0, freq:0, cpm:27.66, ctr:0.9512, conv:48.85, ltv:12429, roas:0.749},
-      {label:'Reddit PRS - Family + Sandwich',  channel:'reddit', type:'PRS', color:'#FF6534', spend:16091, imp:436488, reach:0, freq:0, cpm:36.86, ctr:1.4490, conv:36.24, ltv:9655,  roas:0.600},
-      {label:'Reddit PRS Max',                  channel:'reddit', type:'PRS', color:'#FF8C00', spend:4674,  imp:174600, reach:0, freq:0, cpm:26.77, ctr:1.080,  conv:13.45, ltv:3663,  roas:0.784},
-      {label:'Reddit - Retargeting',            channel:'reddit', type:'RET', color:'#c0392b', spend:4810,  imp:172347, reach:0, freq:0, cpm:27.91, ctr:0.4980, conv:6.38,  ltv:2232,  roas:0.464},
-      {label:'Meta - EP Evergreen Retargeting', channel:'meta',   type:'RET', color:'#0a5bc4', spend:2234,  imp:100656, reach:21099, freq:4.77, cpm:22.19, ctr:0.91, conv:16.70, ltv:3897, roas:1.744},
-      {label:'Meta - MAWM Retargeting',         channel:'meta',   type:'RET', color:'#2473ae', spend:207,   imp:6037,   reach:1472,  freq:4.10, cpm:34.29, ctr:1.56, conv:1.91,  ltv:558,  roas:2.693}
+      {label:'Reddit PRS - Older Parents',      channel:'reddit', type:'PRS', color:'#FF4500', spend:21189, imp:766000, reach:0, freq:0, cpm:27.66, ctr:0.9512, conv:56.53, ltv:14065, roas:0.664},
+      {label:'Reddit PRS - Family + Sandwich',  channel:'reddit', type:'PRS', color:'#FF6534', spend:19020, imp:516000, reach:0, freq:0, cpm:36.86, ctr:1.4490, conv:40.74, ltv:10608, roas:0.558},
+      {label:'Reddit PRS Max',                  channel:'reddit', type:'PRS', color:'#FF8C00', spend:14419, imp:538000, reach:0, freq:0, cpm:26.80, ctr:1.080,  conv:33.49, ltv:8529,  roas:0.592},
+      {label:'Reddit - Retargeting',            channel:'reddit', type:'RET', color:'#c0392b', spend:6241,  imp:223600, reach:0, freq:0, cpm:27.91, ctr:0.4980, conv:8.96,  ltv:2737,  roas:0.438},
+      {label:'Meta - EP Evergreen Retargeting', channel:'meta',   type:'RET', color:'#0a5bc4', spend:2894,  imp:130400, reach:27300, freq:4.77, cpm:22.19, ctr:0.91, conv:26.72, ltv:5425, roas:1.875},
+      {label:'Meta - MAWM Retargeting',         channel:'meta',   type:'RET', color:'#2473ae', spend:232,   imp:6800,   reach:1650,  freq:4.10, cpm:34.12, ctr:1.56, conv:1.91,  ltv:558,  roas:2.406}
+    ],
+    ads: [].concat(_REDDIT_ADS_PRS, _REDDIT_ADS_PRS_MAX, _REDDIT_ADS_RET, _META_ADS)
+  },
+  // Last 14D = Aug 17–30 (l14d + l7d aggregated)
+  l14dagg:{
+    label:"Last 14D", range:"Aug 17 – Aug 30, 2026",
+    adsets:[
+      {label:'Reddit PRS - Older Parents',      channel:'reddit', type:'PRS', color:'#FF4500', spend:7169,  imp:217088, reach:0, freq:0, cpm:33.02, ctr:1.028,  conv:17.95, ltv:4567, roas:0.637},
+      {label:'Reddit PRS - Family + Sandwich',  channel:'reddit', type:'PRS', color:'#FF6534', spend:5011,  imp:134990, reach:0, freq:0, cpm:37.12, ctr:1.251,  conv:12.84, ltv:2741, roas:0.547},
+      {label:'Reddit PRS Max',                  channel:'reddit', type:'PRS', color:'#FF8C00', spend:14418, imp:538600, reach:0, freq:0, cpm:26.77, ctr:1.080,  conv:33.49, ltv:8528, roas:0.591},
+      {label:'Reddit - Retargeting',            channel:'reddit', type:'RET', color:'#c0392b', spend:2848,  imp:115580, reach:0, freq:0, cpm:24.65, ctr:0.513,  conv:5.23,  ltv:1177, roas:0.413},
+      {label:'Meta - EP Evergreen Retargeting', channel:'meta',   type:'RET', color:'#0a5bc4', spend:1559,  imp:58365,  reach:11481, freq:5.09, cpm:26.77, ctr:0.91, conv:16.55, ltv:3573, roas:2.292},
+      {label:'Meta - MAWM Retargeting',         channel:'meta',   type:'RET', color:'#2473ae', spend:39,    imp:966,    reach:193,   freq:2.64, cpm:40.32, ctr:1.56, conv:0.07,  ltv:1,   roas:0.026}
+    ],
+    ads: [].concat(_REDDIT_ADS_PRS, _REDDIT_ADS_PRS_MAX, _REDDIT_ADS_RET, _META_ADS)
+  },
+  // Last 30D = Since Launch (campaign started Aug 3; 28 days of actuals)
+  l30d:{
+    label:"Last 30D", range:"Aug 3 – Aug 30, 2026 (28 days)",
+    adsets:[
+      {label:'Reddit PRS - Older Parents',      channel:'reddit', type:'PRS', color:'#FF4500', spend:21189, imp:766000, reach:0, freq:0, cpm:27.66, ctr:0.9512, conv:56.53, ltv:14065, roas:0.664},
+      {label:'Reddit PRS - Family + Sandwich',  channel:'reddit', type:'PRS', color:'#FF6534', spend:19020, imp:516000, reach:0, freq:0, cpm:36.86, ctr:1.4490, conv:40.74, ltv:10608, roas:0.558},
+      {label:'Reddit PRS Max',                  channel:'reddit', type:'PRS', color:'#FF8C00', spend:14419, imp:538000, reach:0, freq:0, cpm:26.80, ctr:1.080,  conv:33.49, ltv:8529,  roas:0.592},
+      {label:'Reddit - Retargeting',            channel:'reddit', type:'RET', color:'#c0392b', spend:6241,  imp:223600, reach:0, freq:0, cpm:27.91, ctr:0.4980, conv:8.96,  ltv:2737,  roas:0.438},
+      {label:'Meta - EP Evergreen Retargeting', channel:'meta',   type:'RET', color:'#0a5bc4', spend:2894,  imp:130400, reach:27300, freq:4.77, cpm:22.19, ctr:0.91, conv:26.72, ltv:5425, roas:1.875},
+      {label:'Meta - MAWM Retargeting',         channel:'meta',   type:'RET', color:'#2473ae', spend:232,   imp:6800,   reach:1650,  freq:4.10, cpm:34.12, ctr:1.56, conv:1.91,  ltv:558,  roas:2.406}
     ],
     ads: [].concat(_REDDIT_ADS_PRS, _REDDIT_ADS_PRS_MAX, _REDDIT_ADS_RET, _META_ADS)
   }
@@ -349,8 +378,8 @@ const PERIODS = {
 
 // ── helpers ──────────────────────────────────────────────────
 var CHARTS={}, CUR_TAB='s', PERF_INIT=false, CUR_ADSETS=[], CUR_ADS=[], CUR_KEY='l7d';
-const PRESET_KEYS=['sl','l7d','l14d'];
-const PRESET_IDS=['bp-sl','bp-l7d','bp-l14d'];
+const PRESET_KEYS=['sl','l7d','l14d','l14dagg','l30d'];
+const PRESET_IDS=['bp-sl','bp-l7d','bp-l14d','bp-l14dagg','bp-l30d'];
 
 function fmt$(n){return n>=1e6?'$'+(n/1e6).toFixed(1)+'M':n>=1000?'$'+(n/1000).toFixed(0)+'k':'$'+n.toFixed(0);}
 function fmtFull$(n){return'$'+Math.round(n).toLocaleString('en-US');}
